@@ -3,13 +3,11 @@ services:
     name: biome-backend
     env: python
     plan: free
-    buildCommand: "cd backend && chmod +x build.sh && ./build.sh"
-    startCommand: "cd backend && gunicorn amr_project.wsgi:application --bind 0.0.0.0:$PORT"
+    buildCommand: "cd backend && pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput"
+    startCommand: "cd backend && gunicorn $(find . -name wsgi.py | head -1 | xargs dirname | xargs basename).wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DEBUG
         value: "False"
-      - key: PYTHON_VERSION
-        value: "3.11.0"
       - key: DJANGO_SUPERUSER_USERNAME
         value: "admin"
       - key: DJANGO_SUPERUSER_EMAIL
