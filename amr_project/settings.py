@@ -96,3 +96,50 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
+
+# Render production settings
+import os
+import dj_database_url
+from pathlib import Path
+
+# Database configuration for Neon
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://neondb_owner:npg_nst1Ah7uwkER@ep-divine-darkness-adrnz69w-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require',
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
+
+# Static files configuration
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Add whitenoise middleware (add this to your MIDDLEWARE list)
+# MIDDLEWARE = [
+#     'django.middleware.security.SecurityMiddleware',
+#     'whitenoise.middleware.WhiteNoiseMiddleware',  # ADD THIS LINE
+#     # ... your other middleware
+# ]
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://your-app.netlify.app",
+]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Temporary for testing
+
+# For Render
+CSRF_TRUSTED_ORIGINS = [
+    "https://biome-backend.onrender.com",
+    "https://*.onrender.com",
+]
+
+# Security settings
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+ALLOWED_HOSTS = ['*']
+
+# Add rest_framework to installed apps if not already there
+# INSTALLED_APPS += ['rest_framework', 'corsheaders']
